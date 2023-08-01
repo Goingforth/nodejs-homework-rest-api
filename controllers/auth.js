@@ -18,8 +18,10 @@ const register = async (req, res) => {
 
   const newUser = await User.create({ ...req.body, password: hashPassword });
   res.status(201).json({
-    email: newUser.email,
-    subscription: "starter",
+    user: {
+      email: newUser.email,
+      subscription: "starter",
+    },
   });
 };
 
@@ -63,11 +65,9 @@ const getCurrent = async (req, res) => {
 const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
-
-  // res.json({
-  //   message:
-  // })
+  throw HttpError(204);
 };
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
